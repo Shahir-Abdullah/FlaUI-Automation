@@ -1,0 +1,33 @@
+name: "Send FlaUI message to Shahir Abdullah"
+description: |
+  E2E workflow optimized by trace events:
+    1. Attaches to the active ms-teams chat window automatically.
+    2. Focuses the message input area using native application shortcuts.
+    3. Types the text into the active message field and sends it via Enter.
+
+target:
+  process: ms-teams
+  windowTitle: "Chat | Shahir Abdullah (You) | Microsoft Teams"
+
+defaults:
+  timeout: 6s
+  retry: 2
+  pauseBetweenSteps: 300ms
+
+steps:
+  # Step 1: Use the 'focus' action on the chat list or main region if needed.
+  # Since your runner already hooks the window, we can jump straight to shortcut inputs.
+  # Ctrl + Up Arrow is the native Teams shortcut to instantly focus the text input field.
+  - id: focus-message-box-via-shortcut
+    action: keys
+    value: "^{UP}"
+
+  # Step 2: Use the valid framework action 'keys' to type out the greeting text.
+  - id: type-greeting-message
+    action: keys
+    value: "Hello Shahir from FlaUI"
+
+  # Step 3: Send an Enter key stroke to send the chat message out.
+  - id: send-message
+    action: keys
+    value: "{ENTER}"

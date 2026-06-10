@@ -1,0 +1,93 @@
+name: "Greet Ada and tidy the People grid"
+description: |
+  End-to-end workflow against the bundled DemoApp:
+    1. Greets "Ada Lovelace" in French, uppercase.
+    2. Adds a new row to the People grid.
+    3. Edits that new row's Name and ticks its Active checkbox.
+    4. Deletes the row again.
+
+target:
+  process: DemoApp
+  windowTitle: "FlaUI Demo App"
+  # Uncomment to have the runner launch DemoApp itself when it isn't running:
+  # startIfNotRunning:
+  #   path: ".\\DemoApp\\bin\\Debug\\net10.0-windows\\DemoApp.exe"
+  #   waitForReady: 10s
+
+defaults:
+  timeout: 5s
+  retry: 2
+  pauseBetweenSteps: 200ms
+
+steps:
+  # ---------- Greeter -----------------------------------------------------
+
+  - id: clear-greeter
+    action: click
+    target: { automationId: ClearButton }
+
+  - action: setText
+    target: { automationId: FirstNameTextBox }
+    value: "Ada"
+
+  - action: setText
+    target: { automationId: LastNameTextBox }
+    value: "Lovelace"
+
+  - action: selectComboItem
+    target: { automationId: LanguageComboBox }
+    value: "French"
+
+  - action: setCheck
+    target: { automationId: UppercaseCheckBox }
+    value: true
+
+  - action: click
+    target: { automationId: GreetButton }
+
+  - action: waitForText
+    target: { automationId: GreetingLabel }
+    expected: "BONJOUR, ADA LOVELACE!"
+    timeout: 3s
+
+  # ---------- People grid: add, edit, then delete -------------------------
+
+  - id: add-row
+    action: click
+    target: { automationId: AddRowButton }
+
+  - action: setText
+    target:
+      grid: PeopleGrid
+      row: last
+      column: Name
+    value: "Test User"
+
+  - action: setText
+    target:
+      grid: PeopleGrid
+      row: { columnEquals: { Name: "Test User" } }
+      column: Role
+    value: "Tester"
+
+  - action: setCheck
+    target:
+      grid: PeopleGrid
+      row: { columnEquals: { Name: "Test User" } }
+      column: Active
+    value: true
+
+  - action: sleep
+    duration: 400ms
+
+  - id: delete-row
+    action: click
+    target:
+      grid: PeopleGrid
+      row: { columnEquals: { Name: "Test User" } }
+      column: Action
+
+  - action: assert
+    target: { automationId: StatusLabel }
+    property: name
+    expected: "Deleted 'Test User' (now 4)"

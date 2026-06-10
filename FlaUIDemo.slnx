@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="DemoApp/DemoApp.csproj" />
+  <Project Path="UiEventRecorder/UiEventRecorder.csproj" />
+  <Project Path="UiWorkflowRunner/UiWorkflowRunner.csproj" />
+</Solution>

@@ -1,0 +1,209 @@
+﻿<Window x:Class="DemoApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        AutomationProperties.AutomationId="MainWindow"
+        Title="FlaUI Demo App"
+        Height="780" Width="560"
+        MinHeight="600" MinWidth="480"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,0,8,0" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="6,4" />
+            <Setter Property="Margin" Value="0,0,0,8" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="14,6" />
+            <Setter Property="Margin" Value="0,0,8,0" />
+        </Style>
+    </Window.Resources>
+
+    <DockPanel>
+        <StatusBar DockPanel.Dock="Bottom">
+            <TextBlock x:Name="StatusLabel"
+                       AutomationProperties.AutomationId="StatusLabel"
+                       Text="Ready" />
+        </StatusBar>
+
+        <Grid Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- ===== Greeter ===== -->
+            <TextBlock Grid.Row="0" Text="Greeter" FontSize="18" FontWeight="Bold" Margin="0,0,0,8" />
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="110" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="First name:" />
+                <TextBox  Grid.Column="1"
+                          x:Name="FirstNameTextBox"
+                          AutomationProperties.AutomationId="FirstNameTextBox" />
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="110" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Last name:" />
+                <TextBox  Grid.Column="1"
+                          x:Name="LastNameTextBox"
+                          AutomationProperties.AutomationId="LastNameTextBox" />
+            </Grid>
+
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="110" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Language:" />
+                <ComboBox Grid.Column="1"
+                          x:Name="LanguageComboBox"
+                          AutomationProperties.AutomationId="LanguageComboBox"
+                          SelectedIndex="0"
+                          Margin="0,0,0,8">
+                    <ComboBoxItem Content="English" AutomationProperties.AutomationId="LangEnglish" />
+                    <ComboBoxItem Content="Spanish" AutomationProperties.AutomationId="LangSpanish" />
+                    <ComboBoxItem Content="French"  AutomationProperties.AutomationId="LangFrench" />
+                </ComboBox>
+            </Grid>
+
+            <CheckBox Grid.Row="4"
+                      x:Name="UppercaseCheckBox"
+                      AutomationProperties.AutomationId="UppercaseCheckBox"
+                      Content="Show greeting in UPPERCASE"
+                      Margin="0,0,0,8" />
+
+            <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="0,0,0,8">
+                <Button x:Name="GreetButton"
+                        AutomationProperties.AutomationId="GreetButton"
+                        Content="Greet"
+                        Click="GreetButton_Click" />
+                <Button x:Name="ClearButton"
+                        AutomationProperties.AutomationId="ClearButton"
+                        Content="Clear"
+                        Click="ClearButton_Click" />
+            </StackPanel>
+
+            <Border Grid.Row="6"
+                    BorderBrush="#DDD" BorderThickness="1"
+                    Padding="10" Margin="0,0,0,12">
+                <TextBlock x:Name="GreetingLabel"
+                           AutomationProperties.AutomationId="GreetingLabel"
+                           Text="(no greeting yet)"
+                           FontSize="14"
+                           TextWrapping="Wrap" />
+            </Border>
+
+            <!-- ===== Counter ===== -->
+            <StackPanel Grid.Row="7">
+                <TextBlock Text="Counter" FontSize="18" FontWeight="Bold" Margin="0,0,0,8" />
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                    <Button x:Name="DecrementButton"
+                            AutomationProperties.AutomationId="DecrementButton"
+                            Content="-"
+                            Width="40"
+                            Click="DecrementButton_Click" />
+                    <TextBlock x:Name="CountLabel"
+                               AutomationProperties.AutomationId="CountLabel"
+                               Text="0"
+                               FontSize="20"
+                               MinWidth="60"
+                               TextAlignment="Center" />
+                    <Button x:Name="IncrementButton"
+                            AutomationProperties.AutomationId="IncrementButton"
+                            Content="+"
+                            Width="40"
+                            Click="IncrementButton_Click" />
+                    <Button x:Name="ResetButton"
+                            AutomationProperties.AutomationId="ResetButton"
+                            Content="Reset"
+                            Click="ResetButton_Click" />
+                </StackPanel>
+            </StackPanel>
+
+            <!-- ===== People (DataGrid) ===== -->
+            <TextBlock Grid.Row="8" Text="People" FontSize="18" FontWeight="Bold" Margin="0,0,0,8" />
+
+            <Grid Grid.Row="9">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <DataGrid Grid.Row="0"
+                          x:Name="PeopleGrid"
+                          AutomationProperties.AutomationId="PeopleGrid"
+                          ItemsSource="{Binding People}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          CanUserResizeRows="False"
+                          HeadersVisibility="Column"
+                          GridLinesVisibility="All"
+                          SelectionMode="Single"
+                          SelectionUnit="FullRow"
+                          MinHeight="160">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Id"
+                                            Binding="{Binding Id}"
+                                            IsReadOnly="True"
+                                            Width="40" />
+                        <DataGridTextColumn Header="Name"
+                                            Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                            Width="*" />
+                        <DataGridTextColumn Header="Role"
+                                            Binding="{Binding Role, UpdateSourceTrigger=PropertyChanged}"
+                                            Width="*" />
+                        <DataGridCheckBoxColumn Header="Active"
+                                                Binding="{Binding IsActive, UpdateSourceTrigger=PropertyChanged}"
+                                                Width="60" />
+                        <DataGridTemplateColumn Header="Action" Width="90">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Delete"
+                                            AutomationProperties.AutomationId="DeleteRowButton"
+                                            Margin="2"
+                                            Padding="6,2"
+                                            Click="DeleteRowButton_Click" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,8,0,0">
+                    <Button x:Name="AddRowButton"
+                            AutomationProperties.AutomationId="AddRowButton"
+                            Content="Add row"
+                            Click="AddRowButton_Click" />
+                    <Button x:Name="ToggleAllActiveButton"
+                            AutomationProperties.AutomationId="ToggleAllActiveButton"
+                            Content="Toggle all active"
+                            Click="ToggleAllActiveButton_Click" />
+                    <Button x:Name="ClearGridButton"
+                            AutomationProperties.AutomationId="ClearGridButton"
+                            Content="Clear grid"
+                            Click="ClearGridButton_Click" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>
